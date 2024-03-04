@@ -9,7 +9,6 @@ class User(models.Model):
     id = models.CharField(primary_key=True, max_length=17)
     firstName = models.CharField(max_length=30, null=False, blank=False)
     lastName = models.CharField(max_length=30, null=False)
-    score = models.IntegerField(null=False, default=0)
     address = models.CharField(null=False, max_length=100)
     phone = models.CharField(null=False, max_length=12)
 
@@ -17,10 +16,6 @@ class User(models.Model):
         super().clean_fields(exclude)
         if not re.match(r'^\d{3}-\d{2}-\d{5}-\d{2}-\d$', self.phone):
             raise FieldError({'phone': ['Geçersiz phone formatı (Doğru format: 999-99-99999-99-9)']})
-
-    # def clean(self):
-    #     if not re.match(r'^\d{3}-\d{2}-\d{5}-\d{2}-\d$', self.phone):
-    #         raise ValidationError('Geçersiz phone formatı (Doğru format: 999-99-99999-99-9)')
         
     birthDate = models.DateField(null=True, blank=True)
     email = models.EmailField(max_length=80, null=False)
