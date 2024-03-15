@@ -13,6 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 from django_filters import rest_framework as filters
 from Book import serializers
 from rest_framework.views import APIView
+from rest_framework.generics import DestroyAPIView
 
 class BookFilter(filters.FilterSet):
     name = filters.CharFilter(field_name='name')
@@ -100,103 +101,13 @@ class BookUpdateView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+             
 
-class BookDeleteView(APIView):
-    def delete(self, request, id):
-        book = Books.objects.get(pk=id)
+class BookDeleteView(DestroyAPIView):
+    queryset = Books.objects.all()
+    serializer_class = BookSerializer
 
-        if book.loans.exists():
-            return Response({'error': 'The book has related records in the loans table and cannot be deleted'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        book.delete()
-        serializers = BookSerializer(book)
-        return Response(serializers.data, status=status.HTTP_200_OK)
-
-
-
-# @api_view(['GET'])
-# def books(request):
-#     q = request.GET.get('q')
-#     cat = request.GET.get('cat')
-#     author = request.GET.get('author')
-#     publisher = request.GET.get('publisher')
-#     page = request.GET.get('page', 0)
-#     size = request.GET.get('size', 20)
-#     sort = request.GET.get('sort', 'name')
-#     type = request.GET.get('type', 'asc')
-
-#     if not q and not cat and not author and not publisher:
-#         return Response({'error': 'At least one of the fields (q, cat, author and publisher) is required'}, status=status.HTTP_400_BAD_REQUEST)
-
-#     q_obj = Q()
-#     if q:
-#         q_obj |= Q(name__icontains=q) | Q(isbn__icontains=q)
-        
-#     if cat:
-#         q_obj &= Q(category_id=cat)
-        
-#     if author:
-#         q_obj &= Q(author_id=author)
-        
-#     if publisher:
-#         q_obj &= Q(publisher_id=publisher)
-        
-#     if not request.user.is_admin and 'active' in Books._meta.fields:
-#         q_obj &= Q(active=True)
-        
-#     books = Books.objects.filter(q_obj).order_by(f'{sort}__{type}')
-
-#     paginator = Paginator(books, size)
-#     try:
-#         books = paginator.page(page)
-#     except PageNotAnInteger:
-#         books = paginator.page(1)
-#     except EmptyPage:
-#         books = paginator.page(paginator.num_pages)
+    def destroy(self, request, *args, **kwargs):
+        super().destroy(request, *args, **kwargs)
+        return Response({"message": "Book deleted succesfully", "success": True})
     
-#     return Response({'books': [{'id': book.id, 'name': book.name, 'isbn': book.isbn} for book in books]}, status=status.HTTP_200_OK)
-
-
-# def get_book(request, id):
-
-#     book = Books.objects.filter(id=id).first()
-
-#     if not book:
-#         return JsonResponse({'error': 'Kitap bulunamadı.'}, status=404)
-#     return JsonResponse({'id': book.id, 'name': book.name, 'isbn': book.isbn})
-
-
-# def create_book(request):
-#     if request.method == 'POST':
-#         data = request.POST
-
-#     if 'name' not in data or 'isbn' not in data or 'authorId' not in data or 'publisherId' not in data or 'categoryId' not in data or 'shelfCode' not in data or 'featured' not in data:
-#         return JsonResponse({'error': 'name, isbn, authorId, publisherId, categoryId, shelfCode ve featured alanları gereklidir.'}, status=400)
-
-#     if not re.match(r'^\d{3}-\d{2}-\d{5}-\d{2}-\d$', data['isbn']):
-#         return JsonResponse({'error': 'Geçersiz ISBN formatı (Doğru format: 999-99-99999-99-9)'}, status=400)
-    
-#     if not re.match(r'^[A-Z]{2}-\d{3}$', data['shelfCode']):
-#         return JsonResponse({'error': 'Geçersiz raf kodu formatı (Doğru format: AA-999)'}, status=400)
-
-#     # Gerekli alanlar veritabanına kaydedilir
-#     book = Books.objects.create(
-#         name=data['name'],
-#         isbn=data['isbn'],
-#         pageCount=data.get('pageCount'),
-#         authorId=data['authorId'],
-#         publisherId=data['publisherId'],
-#         publishDate=data.get('publishDate'),
-#         categoryId=data['categoryId'],
-#         image=data.get('image'),
-#         shelfCode=data['shelfCode'],
-#         featured=data['featured'],
-#         active=True,
-#         builtIn=False,
-#         createDate=datetime.now(),
-#         loanable=True
-#     )
-
-#     return JsonResponse({'id': book.id, 'name': book.name, 'isbn': book.isbn})
-
