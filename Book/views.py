@@ -8,7 +8,7 @@ from rest_framework import status, generics
 from .models import Books, Category, Author, Publisher
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .serializers import BookSerializer
+from .serializers import BookSerializer, PublisherSerializer
 from rest_framework.permissions import IsAuthenticated
 from django_filters import rest_framework as filters
 from Book import serializers
@@ -100,3 +100,51 @@ class BookDeleteView(DestroyAPIView):
         super().destroy(request, *args, **kwargs)
         return Response({"message": "Book deleted succesfully", "success": True})
     
+
+class PublisherListView(APIView):
+    def get(self, request):
+        page_number = request.GET.get('page', 1)
+        page_size = request.GET.get('size', 20)
+        
+        publishers = Publisher.objects.order_by('name')
+        paginator = Paginator(publishers, page_size)
+
+        try:
+            publishers_page = paginator.page(page_number)
+        except PageNotAnInteger:
+            publishers_page = paginator.page(1)
+        except EmptyPage:
+            publishers_page = paginator.page(paginator.num_pages)
+
+        serializer = PublisherSerializer(publishers_page, many=True)
+        return Response(serializer.data)
+    
+    @api_view(['POST'])
+    def post(self, request):
+        serializer = PublisherSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    
+class PublisherDetailView(APIView):
+    def get_object(self, pk):
+        return get_object_or_404(Publisher, pk=pk)
+    
+    def get(self, request, pk):
+        publisher = self.get_object(pk)
+        serializer = PublisherSerializer(publisher)
+        return Response(serializer.data)
+    def put(self, request, pk):
+        publisher = self.get_object(pk)
+        serializer = PublisherSerializer(publisher, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, pk):
+        publisher = self.get_object(pk)
+        publisher.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
