@@ -8,7 +8,7 @@ from rest_framework import status, generics
 from .models import Books, Category, Author, Publisher
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .serializers import BookSerializer, PublisherSerializer
+from .serializers import BookSerializer, PublisherSerializer, AuthorSerializer
 from rest_framework.permissions import IsAuthenticated
 from django_filters import rest_framework as filters
 from Book import serializers
@@ -148,3 +148,57 @@ class PublisherDetailView(APIView):
         publisher = self.get_object(pk)
         publisher.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+class AuthorListView(APIView):
+    def get(self, request):
+        page_number = request.GET.get('page', 1)
+        page_size = request.GET.get('size', 20)
+        sort_by = request.GET.get('sort', 'name')
+        sort_type = request.GET.get('type', 'asc')
+
+        authors = Author.objects.all().order_by(f'{sort_by}' if sort_type == 'asc' else f'-{sort_by}')
+
+        paginator = Paginator(authors, page_size)
+
+        try:
+            authors_page = paginator.page(page_number)
+        except PageNotAnInteger:
+            authors_page = paginator.page(1)
+        except EmptyPage:
+            authors_page = paginator.page(paginator.num_pages)
+
+        serializers = AuthorSerializer(authors_page, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+    
+
+class AuthorDetailView(APIView):
+    def get_object(self, id):
+        return get_object_or_404(Author, id=id)
+
+    def get(self, request, id):
+        author = get_object_or_404(Author, id=id)
+        serializers = AuthorSerializer(author)
+        return Response(serializers.data)
+    
+    def put(self, request, id):
+        author = self.get_object(id)
+        serializers = AuthorSerializer(author, data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, id):
+        author = self.get_object(id)
+        author.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+class AuthorCreateView(APIView):
+    def post(self, request):
+        serializers = AuthorSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+    
