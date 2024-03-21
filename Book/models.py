@@ -1,10 +1,9 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 import re
-#from .models import Author, Publisher, Category
 
 class Books(models.Model):
-    id = models.CharField(primary_key=True, max_length=17)
+    #id = models.CharField(primary_key=True, max_length=17)
     name = models.CharField(max_length=80, null=False)
     isbn = models.CharField(max_length=17, null=False)
 
@@ -39,7 +38,6 @@ class Books(models.Model):
 
 
 class Category(models.Model):
-    id = models.CharField(primary_key=True, max_length=17)
     name = models.CharField(max_length=80, null=False)
     builtIn = models.BooleanField(null=False, default=False)
     sequence = models.IntegerField(null=False, default=0)
@@ -48,11 +46,11 @@ class Category(models.Model):
         verbose_name_plural = 'Kategoriler'
 
     def __str__(self):
-        return f"{self.id} - {self.name}"
+        return f"{self.name}"
     
 
 class Author(models.Model):
-    id = models.CharField(primary_key=True, max_length=17)
+    #id = models.CharField(primary_key=True, max_length=17)
     name = models.CharField(null=False, max_length=70)
     builtIn = models.BooleanField(null=False, max_length=70)
 
@@ -60,10 +58,10 @@ class Author(models.Model):
         verbose_name_plural = 'Yazarlar'
 
     def __str__(self):
-        return f"{self.id} - {self.name}"
+        return f"{self.name}"
     
 class Publisher(models.Model):
-    id = models.CharField(primary_key=True, max_length=17)
+    #id = models.CharField(primary_key=True, max_length=17)
     name = models.CharField(null=False, max_length=70)
     builtIn = models.BooleanField(null=False, default=False)
 
