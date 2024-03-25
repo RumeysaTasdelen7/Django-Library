@@ -48,7 +48,13 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "django_use_email_as_username.apps.DjangoUseEmailAsUsernameConfig",
+    'rest_framework.authtoken',
+    "corsheaders",
+    'django_filters',
+    'drf_yasg',
 ]
+
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

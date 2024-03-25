@@ -6,15 +6,15 @@ from Book.models import Books
 import re
 
 class User(models.Model):
-    id = models.CharField(primary_key=True, max_length=17)
+    #id = models.CharField(primary_key=True, max_length=17)
     firstName = models.CharField(max_length=30, null=False, blank=False)
     lastName = models.CharField(max_length=30, null=False)
     address = models.CharField(null=False, max_length=100)
-    phone = models.CharField(null=False, max_length=12)
+    phone = models.CharField(null=False, max_length=17)
 
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude)
-        if not re.match(r'^\d{3}-\d{2}-\d{5}-\d{2}-\d$', self.phone):
+        if not re.match(r'^\(\d{3}\) \d{3}-\d{4}$', self.phone):
             raise FieldError({'phone': ['Geçersiz phone formatı (Doğru format: 999-99-99999-99-9)']})
         
     birthDate = models.DateField(null=True, blank=True)
