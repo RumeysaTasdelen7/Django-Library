@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     'drf_yasg',
 ]
 
-
+AUTH_USER_MODEL = 'User.User'
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

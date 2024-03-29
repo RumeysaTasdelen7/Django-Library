@@ -4,8 +4,10 @@ from django.contrib.auth.hashers import make_password
 from django.core.exceptions import FieldError
 from Book.models import Books
 import re
+from django_use_email_as_username.models import BaseUser, BaseUserManager
+from django.utils import timezone
 
-class User(models.Model):
+class User(BaseUser):
     #id = models.CharField(primary_key=True, max_length=17)
     firstName = models.CharField(max_length=30, null=False, blank=False)
     lastName = models.CharField(max_length=30, null=False)
@@ -18,16 +20,18 @@ class User(models.Model):
             raise FieldError({'phone': ['Geçersiz phone formatı (Doğru format: 999-99-99999-99-9)']})
         
     birthDate = models.DateField(null=True, blank=True)
-    email = models.EmailField(max_length=80, null=False)
+    email = models.EmailField(unique=True, max_length=80)
     password = models.CharField(max_length=128, null=False)
 
     def save(self, *args, **kwargs):
         self.password = make_password(self.password)
         super().save(*args, **kwargs)
 
-    createDate = models.DateField(null=False)
+    createDate = models.DateField(null=False, default=timezone.now)
     resetPasswordCode = models.CharField(null=True, blank=True, max_length=50)
     builtIn = models.BooleanField(null=False, default=False)
+
+    objects = BaseUserManager()
 
     class Meta:
         verbose_name_plural = 'Kullanıcılar'

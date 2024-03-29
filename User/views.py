@@ -1,39 +1,38 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from .models import Loan, Role, User
-from .serializers import LoanSerializer, LoginSerializer, RegisterSerializer
+from .serializers import LoanSerializer, RegisterSerializer, CustomLoginSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import authenticate
 from rest_framework.generics import CreateAPIView
-from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import AccessToken
-
 
 class RegisterView(CreateAPIView):
     queryset = User.objects.all()
     permission_classes = [AllowAny]
     serializer_class = RegisterSerializer
 
-    def create(self, request, *args, **kwargs):
-        response = super().create(request, *args, **kwargs)
-        return Response({'message': 'Registration successfully done', 'success': True})
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        return Response({'message': 'Registration succesfully done.', 'success':True})
     
 
 class LoginView(TokenObtainPairView):
-    serializer_class = LoginSerializer
-
+    serializer_class = CustomLoginSerializer
     def post(self, request, *args, **kwargs):
-
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user=serializer.validated_data['user']
         access_token = str(AccessToken.for_user(user))
 
         return Response({"token": access_token})
-
+    
 class LoanListView(APIView):
     def get(self, request):
         user = request.user
