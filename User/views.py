@@ -13,6 +13,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import AccessToken
 
+
 class RegisterView(CreateAPIView):
     queryset = User.objects.all()
     permission_classes = [AllowAny]
@@ -33,6 +34,7 @@ class LoginView(TokenObtainPairView):
 
         return Response({"token": access_token})
     
+
 class LoanListView(APIView):
     def get(self, request):
         user = request.user

@@ -44,3 +44,4 @@ class CustomLoginSerializer(serializers.Serializer):
         else:
             raise serializers.ValidationError('Both email and password are required')
 
+
