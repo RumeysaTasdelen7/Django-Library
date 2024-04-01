@@ -3,7 +3,7 @@ from .models import Loan, User, Role
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
-
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 class LoanSerializer(serializers.ModelSerializer):
     class Meta:
         model = Loan
@@ -25,7 +25,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.set_password(validated_data["password"])
         user.save()
         return user
-    
+
 
 class CustomLoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
@@ -39,7 +39,7 @@ class CustomLoginSerializer(serializers.Serializer):
             user = authenticate(request=self.context.get('request'), email=email, password=password)
             if not user:
                 raise serializers.ValidationError('Invalid Email or Password')
-            attrs['user'] = user
+            attrs['user'] = user  # Kullanıcıyı validated_data içine ekleyin
             return attrs
         else:
             raise serializers.ValidationError('Both email and password are required')

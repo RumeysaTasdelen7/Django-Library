@@ -9,10 +9,9 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from rest_framework.generics import CreateAPIView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import AccessToken
-
 
 class RegisterView(CreateAPIView):
     queryset = User.objects.all()
@@ -34,6 +33,8 @@ class LoginView(TokenObtainPairView):
 
         return Response({"token": access_token})
     
+
+
 
 class LoanListView(APIView):
     def get(self, request):
