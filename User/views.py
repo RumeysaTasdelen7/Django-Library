@@ -1,17 +1,20 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from .models import Loan, Role, User
-from .serializers import LoanSerializer, RegisterSerializer, CustomLoginSerializer
+from .serializers import LoanSerializer, RegisterSerializer, CustomLoginSerializer, UserSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework import filters
+from core.page_filter import pages_filter
+from rest_framework.exceptions import NotFound
 
 class RegisterView(CreateAPIView):
     queryset = User.objects.all()
@@ -34,6 +37,29 @@ class LoginView(TokenObtainPairView):
         return Response({"token": access_token})
     
 
+
+class UserView(ListAPIView):
+    serializer_class = UserSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["firstName", "lastName"]
+
+    def  get_queryset(self):
+        queryset = User.objects.all()
+
+        if self.request.user.is_authenticated:
+            return User.objects.filter(id=self.request.user.id)
+        return queryset
+        
+    def list(self, request, *args, **kwargs):
+        if request.path.startswith('user/auth/pages') or request.path.startswith('/user/auth/pages'):
+            return pages_filter(self, request, User, *args, **kwargs)
+        return super().list(request, *args, **kwargs)
+
+class UserDetailView(RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    
 
 
 class LoanListView(APIView):
