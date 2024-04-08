@@ -232,3 +232,5 @@ class AuthLoanDetailView(APIView):
 
         return Response(response_data)
 
+
+

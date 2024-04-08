@@ -14,6 +14,7 @@ from django_filters import rest_framework as filters
 from Book import serializers
 from rest_framework.views import APIView
 from rest_framework.generics import DestroyAPIView
+from rest_framework.authentication import SessionAuthentication
 
 class BookFilter(filters.FilterSet):
     name = filters.CharFilter(field_name='name')
@@ -29,6 +30,7 @@ class BookListView(generics.ListAPIView):
     queryset = Books.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticated]
+    authentication_classes = [SessionAuthentication]
 
     filterset_class = BookFilter
 
@@ -119,7 +121,6 @@ class PublisherListView(APIView):
         serializer = PublisherSerializer(publishers_page, many=True)
         return Response(serializer.data)
     
-    @api_view(['POST'])
     def post(self, request):
         serializer = PublisherSerializer(data=request.data)
         if serializer.is_valid():
