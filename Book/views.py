@@ -26,43 +26,14 @@ class BookFilter(filters.FilterSet):
         model = Books
         fields = ['name', 'author', 'category', 'publisher']
 
-class BookListView(generics.ListAPIView):
-    queryset = Books.objects.all()
-    serializer_class = BookSerializer
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [SessionAuthentication]
-
-    filterset_class = BookFilter
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-
-        q = self.request.query_params.get('q')
-        cat = self.request.query_params.get('cat')
-        author = self.request.query_params.get('author')
-        publisher = self.request.query_params.get('publisher')
-
-        if not q and not cat and not author and not publisher:
-            raise serializers.ValidationError("At least one of the fields (q, cat, author, and publisher) is required.")
-
-        if q:
-            queryset = queryset.filter(Q(name__icontains=q) | Q(author__name__icontains=q) | Q(isbn__icontains=q) | Q(publisher__name__icontains=q))
-
-        if cat:
-            queryset = queryset.filter(category_id=cat)
-
-        if author:
-            queryset = queryset.filter(author_id=author)
-
-        if publisher:
-            queryset = queryset.filter(publisher_id=publisher)
-
-        if not self.request.user.is_admin:
-            queryset = queryset.filter(active=True)
-
-        return queryset
     
-
+class BookListView(APIView):
+    def get(self, request):
+        books = Books.objects.all()
+        serializer = BookSerializer(books, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    
 class BookDetailView(APIView):
     def get(self, requset, id):
         book = get_object_or_404(Books, id=id)
