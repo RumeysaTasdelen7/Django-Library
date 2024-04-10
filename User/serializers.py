@@ -39,7 +39,7 @@ class CustomLoginSerializer(serializers.Serializer):
             user = authenticate(request=self.context.get('request'), email=email, password=password)
             if not user:
                 raise serializers.ValidationError('Invalid Email or Password')
-            attrs['user'] = user  # Kullanıcıyı validated_data içine ekleyin
+            attrs['user'] = user
             return attrs
         else:
             raise serializers.ValidationError('Both email and password are required')
