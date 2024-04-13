@@ -64,15 +64,12 @@ class UserDetailView(RetrieveUpdateDestroyAPIView):
 
 class LoanListView(APIView):
     def get(self, request):
-        user = request.user
-        loans = Loan.objects.filter(userId=user)
+        loans = Loan.objects.all()
 
         serializer = LoanSerializer(loans, many=True)
-        for loan_data in serializer.data:
-            loan_data.pop('notes', None)
-
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
+class LoanCreateView(APIView):
     def post(self, request):
         serializer = LoanSerializer(data=request.data)
         if serializer.is_valid():
