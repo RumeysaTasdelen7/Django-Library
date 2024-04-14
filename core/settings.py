@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-x8+ry#r)jq!m-!yq=0d=ogz9$*%9f_+qmq^8#+4&g9&8sci8k2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -49,10 +49,16 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "django_use_email_as_username.apps.DjangoUseEmailAsUsernameConfig",
     'rest_framework.authtoken',
+    'rest_framework_swagger',
     "corsheaders",
     'django_filters',
     'drf_yasg',
 ]
+
+SWAGGER_SETTINGS = {
+    "LOGIN_URL": "rest_framework:login",
+    "LOGOUT_URL": "rest_framework:logout"
+}
 
 AUTH_USER_MODEL = 'User.User'
 
@@ -133,7 +139,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "static/"
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+#STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
 STATIC_DIRS = [
@@ -156,14 +163,19 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ),
-    'DEFAULT_PERMISSION_CLASS': (
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+        'rest_framework.renderers.OpenAPIRenderer',
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+
+    'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
         'rest_framework.permissions.IsAuthenticated',
-    )
-
-}
-
-REST_FRAMEWORK = {
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+    ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+
 }

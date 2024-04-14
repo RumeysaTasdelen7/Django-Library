@@ -1,0 +1,860 @@
+openapi: 3.0.2
+info:
+  title: ''
+  version: ''
+paths:
+  /loans/:
+    get:
+      operationId: listLoans
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+          description: ''
+      tags:
+      - loans
+  /loans/{id}/:
+    get:
+      operationId: retrieveLoanDetail
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - loans
+    put:
+      operationId: updateLoanDetail
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+          multipart/form-data:
+            schema: {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - loans
+    delete:
+      operationId: destroyLoanDetail
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - loans
+  /loans/user/{userId}/:
+    get:
+      operationId: retrieveUserLoanList
+      description: ''
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - loans
+  /loans/book/{bookId}/:
+    get:
+      operationId: retrieveBookLoanList
+      description: ''
+      parameters:
+      - name: bookId
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - loans
+  /loans/auth/{loanId}/:
+    get:
+      operationId: retrieveAuthLoanDetail
+      description: ''
+      parameters:
+      - name: loanId
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - loans
+  /user/:
+    get:
+      operationId: listUsers
+      description: ''
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - count
+                - results
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=4
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=2
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+          description: ''
+      tags:
+      - user
+  /user/{id}/:
+    get:
+      operationId: retrieveUser
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+      tags:
+      - user
+    put:
+      operationId: updateUser
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+      tags:
+      - user
+    patch:
+      operationId: partialUpdateUser
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+      tags:
+      - user
+    delete:
+      operationId: destroyUser
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - user
+  /book/books/:
+    get:
+      operationId: listBooks
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+          description: ''
+      tags:
+      - book
+  /book/books/{id}/:
+    get:
+      operationId: retrieveBookDetail
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - book
+  /book/publishers/:
+    get:
+      operationId: listPublishers
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+          description: ''
+      tags:
+      - book
+    post:
+      operationId: createPublisherList
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+          multipart/form-data:
+            schema: {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - book
+  /book/publishers/{id}/:
+    get:
+      operationId: retrievePublisherDetail
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - book
+    put:
+      operationId: updatePublisherDetail
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+          multipart/form-data:
+            schema: {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - book
+    delete:
+      operationId: destroyPublisherDetail
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - book
+  /book/authors/:
+    get:
+      operationId: listAuthors
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+          description: ''
+      tags:
+      - book
+  /book/authors/{id}/:
+    get:
+      operationId: retrieveAuthorDetail
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - book
+    put:
+      operationId: updateAuthorDetail
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+          multipart/form-data:
+            schema: {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - book
+    delete:
+      operationId: destroyAuthorDetail
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - book
+  /book/categories/:
+    get:
+      operationId: listCategories
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+          description: ''
+      tags:
+      - book
+    post:
+      operationId: createCategoryList
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+          multipart/form-data:
+            schema: {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - book
+  /book/categories/{id}/:
+    get:
+      operationId: retrieveCategoryDetail
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - book
+    put:
+      operationId: updateCategoryDetail
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+          multipart/form-data:
+            schema: {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - book
+    delete:
+      operationId: destroyCategoryDetail
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - book
+  /swagger-docs/:
+    get:
+      operationId: listSwaggerSchemas
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/coreapi+json:
+              schema:
+                type: array
+                items: {}
+            application/openapi+json:
+              schema:
+                type: array
+                items: {}
+            text/html:
+              schema:
+                type: array
+                items: {}
+          description: ''
+      tags:
+      - swagger-docs
+  /loans/create/:
+    post:
+      operationId: createLoan
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+          multipart/form-data:
+            schema: {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - loans
+  /register/:
+    post:
+      operationId: createUser
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Register'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Register'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Register'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Register'
+          description: ''
+      tags:
+      - register
+  /login/:
+    post:
+      operationId: createCustomLogin
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomLogin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomLogin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomLogin'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomLogin'
+          description: ''
+      tags:
+      - login
+  /book/books/create/:
+    post:
+      operationId: createBook
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+          multipart/form-data:
+            schema: {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - book
+  /book/authors/create/:
+    post:
+      operationId: createAuthor
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+          multipart/form-data:
+            schema: {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - book
+  /book/books/{id}/update/:
+    put:
+      operationId: updateBook
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+          multipart/form-data:
+            schema: {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - book
+  /book/books/{id}/delete/:
+    delete:
+      operationId: destroyBooks
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this books.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - book
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        password:
+          type: string
+          maxLength: 128
+        last_login:
+          type: string
+          format: date-time
+          nullable: true
+        firstName:
+          type: string
+          maxLength: 30
+        lastName:
+          type: string
+          maxLength: 30
+        address:
+          type: string
+          maxLength: 100
+        phone:
+          type: string
+          pattern: ^\(\d{3}\) \d{3}-\d{4}$
+          maxLength: 17
+        birthDate:
+          type: string
+          format: date
+          nullable: true
+        email:
+          type: string
+          format: email
+          maxLength: 80
+        createDate:
+          type: string
+          format: date
+        resetPasswordCode:
+          type: string
+          nullable: true
+          maxLength: 50
+        builtIn:
+          type: boolean
+        is_staff:
+          type: boolean
+        is_superuser:
+          type: boolean
+      required:
+      - password
+      - firstName
+      - lastName
+      - address
+      - email
+    Register:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        firstName:
+          type: string
+          maxLength: 30
+        lastName:
+          type: string
+          maxLength: 30
+        password:
+          type: string
+          writeOnly: true
+        birthDate:
+          type: string
+          format: date
+          nullable: true
+        address:
+          type: string
+          maxLength: 100
+        phone:
+          type: string
+          pattern: ^\(\d{3}\) \d{3}-\d{4}$
+          maxLength: 17
+        builtIn:
+          type: boolean
+        email:
+          type: string
+          format: email
+      required:
+      - firstName
+      - lastName
+      - password
+      - address
+      - email
+    CustomLogin:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+      - email
+      - password
