@@ -1,10 +1,8 @@
 from django.db import models
 from django.core.validators import RegexValidator
 from django.contrib.auth.hashers import make_password
-from django.core.exceptions import FieldError
 from Book.models import Books
-import re
-from django_use_email_as_username.models import BaseUser, BaseUserManager
+from django_use_email_as_username.models import BaseUserManager
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
@@ -40,15 +38,13 @@ class User(AbstractBaseUser):
     createDate = models.DateField(default=timezone.now)
     resetPasswordCode = models.CharField(null=True, blank=True, max_length=50)
     builtIn = models.BooleanField(default=False)
-    
-    # Django'nun varsayılan is_staff ve is_superuser alanları
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['firstName', 'lastName', 'address', 'phone']  # Ek olarak gerekli alanlar
+    REQUIRED_FIELDS = ['firstName', 'lastName', 'address', 'phone']
 
     class Meta:
         verbose_name_plural = 'Kullanıcılar'

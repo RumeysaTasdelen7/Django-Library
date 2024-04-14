@@ -1,20 +1,16 @@
-import datetime
-import re
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status, generics
+from rest_framework import status
 from .models import Books, Category, Author, Publisher
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .serializers import BookSerializer, PublisherSerializer, AuthorSerializer, CategorySerializer
-from rest_framework.permissions import IsAuthenticated
 from django_filters import rest_framework as filters
-from Book import serializers
 from rest_framework.views import APIView
 from rest_framework.generics import DestroyAPIView
-from rest_framework.authentication import SessionAuthentication
+
 
 class BookFilter(filters.FilterSet):
     name = filters.CharFilter(field_name='name')

@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from .models import Loan, User, Role
+from .models import Loan, User
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
 class LoanSerializer(serializers.ModelSerializer):
     class Meta:
         model = Loan

@@ -1,20 +1,18 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from .models import Loan, Role, User
+from .models import Loan, User
 from .serializers import LoanSerializer, RegisterSerializer, CustomLoginSerializer, UserSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateDestroyAPIView
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework import filters
 from core.page_filter import pages_filter
-from rest_framework.exceptions import NotFound
 
 class RegisterView(CreateAPIView):
     queryset = User.objects.all()
